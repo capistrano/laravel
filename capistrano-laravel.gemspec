@@ -4,7 +4,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
 Gem::Specification.new do |spec|
   spec.name          = 'capistrano-laravel'
-  spec.version       = '0.0.1'
+  spec.version       = '0.0.2'
   spec.authors       = ['Peter Mitchell']
   spec.email         = ['peterjmit@gmail.com']
   spec.description   = %q{Laravel deployment for Capistrano 3.x}

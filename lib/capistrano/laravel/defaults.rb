@@ -13,5 +13,5 @@ set :file_permissions_paths, [
   'app/storage/sessions',
   'app/storage/views',
 ]
-set :file_permissions_users, [fetch(:webserver_user)]
+set :file_permissions_users, [fetch(:laravel_server_user)]
 
