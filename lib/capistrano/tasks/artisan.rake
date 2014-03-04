@@ -1,5 +1,5 @@
 namespace :laravel do
-  desc "Exceute a provided artisan command"
+  desc "Execute a provided artisan command"
   task :artisan, :command_name do |t, args|
     # ask only runs if argument is not provided
     ask(:cmd, "list")
