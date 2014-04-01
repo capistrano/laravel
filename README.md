@@ -33,7 +33,7 @@ The gem makes the following configuration variables available (shown with defaul
 
 ```ruby
 set :laravel_roles, :all
-set :laravel_artisan_flags, "--env production"
+set :laravel_artisan_flags, "--env=production"
 set :laravel_server_user, "www-data"
 ```
 
