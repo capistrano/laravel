@@ -1,6 +1,6 @@
-# Capistrano::FilePermissions
+# Capistrano::laravel
 
-File permissions handling for Capistrano v3.*
+Deploy Laravel applications with Capistrano v3.*
 
 ## Installation
 
