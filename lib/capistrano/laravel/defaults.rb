@@ -6,12 +6,14 @@ set :laravel_server_user, "www-data"
 set :linked_dirs, []
 
 set :file_permissions_paths, [
-  'app/storage',
-  'app/storage/cache',
-  'app/storage/logs',
-  'app/storage/meta',
-  'app/storage/sessions',
-  'app/storage/views',
+  'storage',
+  'storage/app',
+  'storage/framework',
+  'storage/framework/services.json',
+  'storage/framework/cache',
+  'storage/framework/sessions',
+  'storage/framework/views',
+  'storage/logs',
 ]
 set :file_permissions_users, [fetch(:laravel_server_user)]
 
