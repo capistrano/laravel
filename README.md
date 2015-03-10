@@ -4,6 +4,7 @@ Deploy Laravel applications with Capistrano v3.*
 
 ## Installation
 
+
 Add this line to your application's Gemfile:
 
 ```ruby
