@@ -9,9 +9,9 @@ namespace :load do
     set :laravel_version, 5.1
     set :laravel_dotenv_file, './.env'
     set :laravel_artisan_flags, "--env=production"
+    set :laravel_set_linked_dirs, false
+    set :laravel_set_acl_paths, true
     set :laravel_server_user, "www-data"
-    set :laravel_linked_dirs, false
-    set :laravel_acl_paths, true
 
     # Folders to link between releases
     set :laravel_4_linked_dirs, [
@@ -62,7 +62,7 @@ namespace :laravel do
   end
 
   desc "Optimize a Laravel installation for optimimum performance in production."
-  task :optimize_laravel do
+  task :optimize_release do
     if fetch(:laravel_version) >= 5
       invoke "laravel:artisan", "config:cache"
     end
@@ -83,38 +83,48 @@ namespace :laravel do
       laravel_acl_paths = fetch(:laravel_5_1_acl_paths)
     end
 
-    if fetch(:laravel_linked_dirs)
+    if fetch(:laravel_set_linked_dirs)
       set :linked_dirs, fetch(:linked_dirs, []).push(*laravel_linked_dirs)
     end
 
-    if fetch(:laravel_acl_paths)
+    if fetch(:laravel_set_acl_paths)
       set :file_permissions_paths, fetch(:file_permissions_paths, []).push(*laravel_acl_paths)
     end
   end
 
-  desc "Upload dotenv file for release"
+  desc "Upload dotenv file for release."
   task :upload_dotenv_file do
     if fetch(:laravel_version) >= 5
       on roles(:all) do
+        unless fetch(:laravel_dotenv_file).empty?
           upload! fetch(:laravel_dotenv_file), "#{release_path}/.env"
+        end
       end
     end
   end
 
   desc "Seed the database."
   task :seed_db do
-      on roles(:batch) do
-          within "#{current_path}" do
-              invoke "laravel:artisan", "db:seed"
-          end
+    on roles(:batch) do
+      within "#{current_path}" do
+        invoke "laravel:artisan", "db:seed"
       end
+    end
   end
 
-  desc "Create missing directories"
+  desc "Create missing directories for ACL permissions."
   task :create_acl_paths do
-    if fetch(:laravel_acl_paths)
+    if fetch(:laravel_set_acl_paths)
+      if fetch(:laravel_version) < 5
+        laravel_acl_paths = fetch(:laravel_4_acl_paths)
+      elsif fetch(:laravel_version) < 5.1
+        laravel_acl_paths = fetch(:laravel_5_acl_paths)
+      else
+        laravel_acl_paths = fetch(:laravel_5_1_acl_paths)
+      end
+
       on roles fetch(:laravel_roles) do
-        fetch(:file_permissions_paths).each do |path|
+        laravel_acl_paths.each do |path|
           acl_path = release_path.join(path)
           if test("[ ! -e '#{acl_path}' ]")
             execute :mkdir, '-v', acl_path
@@ -126,7 +136,7 @@ namespace :laravel do
     end
   end
 
-  desc "Migrate the database using Artisan"
+  desc "Run migrations against the database using Artisan."
   task :migrate_db do
     within release_path do
       invoke "laravel:artisan", "migrate"
@@ -141,7 +151,7 @@ namespace :deploy do
 
   before "deploy:updated", :laravel_tasks do
     invoke "laravel:upload_dotenv_file"
-    invoke "laravel:optimize_laravel"
+    invoke "laravel:optimize_release"
     invoke "laravel:create_acl_paths"
     invoke "deploy:set_permissions:acl"
   end
