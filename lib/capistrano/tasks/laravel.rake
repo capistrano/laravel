@@ -59,12 +59,23 @@ namespace :laravel do
     end
   end
 
-  desc "Optimize a Laravel installation for optimimum performance in production."
-  task :optimize_release do
+  desc "Optimize the configuration"
+  task :optimize_config do
     if fetch(:laravel_version) >= 5
       invoke "laravel:artisan", "config:cache"
     end
+  end
 
+  desc "Optimize the routing file"
+  task :optimize_route do
+    if fetch(:laravel_version) >= 5
+      invoke "laravel:artisan", "route:cache"
+    end
+  end
+
+
+  desc "Optimize a Laravel installation for optimimum performance in production."
+  task :optimize_release do
     invoke "laravel:artisan", "optimize"
   end
 
