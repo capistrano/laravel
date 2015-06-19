@@ -41,8 +41,6 @@ namespace :load do
       'storage/logs',
     ]
     set :laravel_5_1_acl_paths, fetch(:laravel_5_paths, []).push('bootstrap/cache')
-
-    set :file_permissions_users, [fetch(:laravel_server_user)]
   end
 end
 
@@ -89,6 +87,7 @@ namespace :laravel do
 
     if fetch(:laravel_set_acl_paths)
       set :file_permissions_paths, fetch(:file_permissions_paths, []).push(*laravel_acl_paths)
+      set :file_permissions_users, [fetch(:laravel_server_user)]
     end
   end
 
