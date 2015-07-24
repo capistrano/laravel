@@ -161,7 +161,9 @@ namespace :laravel do
   desc 'Rollback migrations against the database using Artisan.'
   task :rollback_db do
     on roles fetch(:laravel_roles) do
-      invoke 'laravel:artisan', 'migrate:rollback'
+      within release_path do
+        execute :php, :artisan, 'migrate:rollback', *args.extras, fetch(:laravel_artisan_migrate_flags)
+      end
     end
   end
 
