@@ -18,14 +18,14 @@ namespace :load do
 
     # Folders to link between releases
     set :laravel_4_linked_dirs, [
-        'app/storage',
+      'app/storage'
     ]
     set :laravel_5_linked_dirs, [
-        'storage',
+      'storage'
     ]
     set :laravel_5_1_linked_dirs, [
-        'bootstrap/cache',
-        'storage',
+      'bootstrap/cache',
+      'storage'
     ]
 
     # Folders to set permissions on based on laravel version
@@ -35,7 +35,7 @@ namespace :load do
       'app/storage/logs',
       'app/storage/meta',
       'app/storage/sessions',
-      'app/storage/views',
+      'app/storage/views'
     ]
     set :laravel_5_acl_paths, [
       'storage',
@@ -44,7 +44,7 @@ namespace :load do
       'storage/framework/cache',
       'storage/framework/sessions',
       'storage/framework/views',
-      'storage/logs',
+      'storage/logs'
     ]
     set :laravel_5_1_acl_paths, [
       'bootstrap/cache',
@@ -54,7 +54,7 @@ namespace :load do
       'storage/framework/cache',
       'storage/framework/sessions',
       'storage/framework/views',
-      'storage/logs',
+      'storage/logs'
     ]
   end
 end
@@ -114,7 +114,7 @@ namespace :laravel do
   task :upload_dotenv_file do
     if fetch(:laravel_version) >= 5
       on roles fetch(:laravel_roles) do
-        if !fetch(:laravel_dotenv_file).empty?
+        unless fetch(:laravel_dotenv_file).empty?
           upload! fetch(:laravel_dotenv_file), "#{release_path}/.env"
         end
       end
@@ -122,7 +122,7 @@ namespace :laravel do
   end
 
   desc 'Execute a provided artisan command'
-  task :artisan, :command_name do |t, args|
+  task :artisan, :command_name do |_t, args|
     # ask only runs if argument is not provided
     ask(:cmd, 'list')
     command = args[:command_name] || fetch(:cmd)
@@ -136,16 +136,12 @@ namespace :laravel do
 
   desc 'Optimize the configuration'
   task :optimize_config do
-    if fetch(:laravel_version) >= 5
-      invoke 'laravel:artisan', 'config:cache'
-    end
+    invoke 'laravel:artisan', 'config:cache' if fetch(:laravel_version) >= 5
   end
 
   desc 'Optimize the routing file'
   task :optimize_route do
-    if fetch(:laravel_version) >= 5
-      invoke 'laravel:artisan', 'route:cache'
-    end
+    invoke 'laravel:artisan', 'route:cache' if fetch(:laravel_version) >= 5
   end
 
   desc 'Optimize a Laravel installation for optimimum performance in production.'
@@ -154,7 +150,7 @@ namespace :laravel do
   end
 
   desc 'Run migrations against the database using Artisan.'
-  task :migrate_db do |t, args|
+  task :migrate_db do |_t, args|
     on roles fetch(:laravel_migrate_roles) do
       within release_path do
         execute :php, :artisan, :migrate, *args.extras, fetch(:laravel_artisan_migrate_flags)
@@ -171,11 +167,18 @@ namespace :laravel do
 
   desc 'Run Laravel Elixir'
   task :elixir do
-    on roles fetch(:laravel_roles) do
-      laravel_version = fetch(:laravel_version)
-      if laravel_version >= 5
+    laravel_version = fetch(:laravel_version)
+    if laravel_version >= 5
+      on roles fetch(:laravel_roles) do
         gulpfile = release_path.join('gulpfile.js')
         if test("[ -e '#{gulpfile}' ]")
+          if test('[ ! -e "$(npm config get prefix)/bin/gulp" ]')
+            execute :npm, :install, '--global', 'gulp'
+          end
+          local_gulp = release_path.join('node_modules/gulp')
+          if test("[ ! -e #{local_gulp} ]")
+            execute :npm, :install, '--save-dev', '--silent', '--no-spin', :gulp
+          end
           invoke 'gulp'
         else
           info "#{gulpfile} not found!"
@@ -189,7 +192,6 @@ namespace :laravel do
   after 'deploy:symlink:shared', 'deploy:set_permissions:acl'
   after 'deploy:symlink:shared', 'laravel:upload_dotenv_file'
   before 'deploy:updated', 'laravel:optimize_release'
-  after 'deploy:updated', 'laravel:migrate_db'
 end
 
 # Override the npm install function.
@@ -197,7 +199,7 @@ end
 # Since package.json is option in Laravel, and only included since
 # version 5, it's better to skip install if it doesn't exist.
 namespace :npm do
-  Rake::Task["install"].clear_actions
+  Rake::Task['install'].clear_actions
   task :install do
     on roles fetch(:npm_roles) do
       npm_target_path = fetch(:npm_target_path, release_path)
