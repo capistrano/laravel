@@ -174,16 +174,32 @@ namespace :laravel do
       on roles fetch(:laravel_roles) do
         gulpfile = release_path.join('gulpfile.js')
         if test("[ -e '#{gulpfile}' ]")
-          if test('[ ! -e "$(npm config get prefix)/bin/gulp" ]')
-            execute :npm, :install, '--global', 'gulp'
+          # Install gulp globally
+          unless test('which gulp')
+            if test('[ -w "$(npm config get prefix)" ]')
+              execute :npm, :install, '--global', :gulp
+            else
+              error "Couldn't install Gulp globally!"
+              next
+            end
           end
-          local_gulp = release_path.join('node_modules/gulp')
-          if test("[ ! -e #{local_gulp} ]")
-            execute :npm, :install, '--save-dev', '--silent', '--no-spin', :gulp
+
+          # Install Gulp if not found
+          gulp_module = release_path.join('node_modules/gulp')
+          unless test("[ -e #{gulp_module} ]")
+            within release_path do
+              execute :npm, :install, :gulp
+            end
           end
-          invoke 'gulp'
-        else
-          info "#{gulpfile} not found!"
+
+          # To prevent failure from notify-send not working
+          unless test('which notify-send')
+            execute 'export DISABLE_NOTIFIER=true'
+          end
+
+          within release_path do
+            invoke 'gulp'
+          end
         end
       end
     end
