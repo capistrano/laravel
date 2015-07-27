@@ -188,7 +188,10 @@ namespace :laravel do
           gulp_module = release_path.join('node_modules/gulp')
           unless test("[ -e #{gulp_module} ]")
             within release_path do
-              execute :npm, :install, :gulp
+              execute :npm, :install, '--silent', '--no-spin', :gulp
+              if laravel_version == 5
+                execute :npm, :install, '--silent', '--no-spin', 'laravel-elixir'
+              end
             end
           end
 
