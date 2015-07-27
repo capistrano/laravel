@@ -234,7 +234,4 @@ namespace :npm do
       end
     end
   end
-
-  # Execute Gulp for Laravel Elixir after installing NPM packages
-  after 'npm:install', 'laravel:elixir'
 end
