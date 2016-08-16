@@ -131,6 +131,9 @@ namespace :laravel do
         execute :php, :artisan, command, *args.extras, fetch(:laravel_artisan_flags)
       end
     end
+    
+    # enable task artisan to be ran twice
+    Rake::Task['laravel:artisan'].reenable
   end
 
   desc 'Optimize the configuration'
