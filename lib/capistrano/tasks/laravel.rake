@@ -31,12 +31,21 @@ namespace :load do
 
     # Linked directories for a standard Laravel 4 application
     set :laravel_4_linked_dirs, [
-      'app/storage'
+      'app/storage/public',
+      'app/storage/cache',
+      'app/storage/logs',
+      'app/storage/meta',
+      'app/storage/sessions',
+      'app/storage/views'
     ]
 
     # Linked directories for a standard Laravel 5 application
     set :laravel_5_linked_dirs, [
-      'storage'
+      'storage/app',
+      'storage/framework/cache',
+      'storage/framework/sessions',
+      'storage/framework/views',
+      'storage/logs'
     ]
 
     # Ensure the paths in :file_permissions_paths exist?
