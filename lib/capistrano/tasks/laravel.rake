@@ -107,7 +107,7 @@ namespace :laravel do
 
     on roles fetch(:laravel_roles) do
       fetch(:linked_dirs).each do |path|
-        within release_path do
+        within shared_path do
           execute :mkdir, '-p', path
         end
       end
