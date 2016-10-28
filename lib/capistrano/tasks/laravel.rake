@@ -31,12 +31,21 @@ namespace :load do
 
     # Linked directories for a standard Laravel 4 application
     set :laravel_4_linked_dirs, [
-      'app/storage'
+      'app/storage/public',
+      'app/storage/cache',
+      'app/storage/logs',
+      'app/storage/meta',
+      'app/storage/sessions',
+      'app/storage/views'
     ]
 
     # Linked directories for a standard Laravel 5 application
     set :laravel_5_linked_dirs, [
-      'storage'
+      'storage/app',
+      'storage/framework/cache',
+      'storage/framework/sessions',
+      'storage/framework/views',
+      'storage/logs'
     ]
 
     # Ensure the paths in :file_permissions_paths exist?
@@ -97,10 +106,8 @@ namespace :laravel do
       laravel_acl_paths = fetch(:laravel_4_acl_paths)
     end
 
-    if fetch(:laravel_set_acl_paths)
-      set :file_permissions_paths, fetch(:file_permissions_paths, []).push(*laravel_acl_paths).uniq
-      set :file_permissions_users, fetch(:file_permissions_users, []).push(fetch(:laravel_server_user)).uniq
-    end
+    set :file_permissions_paths, fetch(:file_permissions_paths, []).push(*laravel_acl_paths).uniq
+    set :file_permissions_users, fetch(:file_permissions_users, []).push(fetch(:laravel_server_user)).uniq
   end
 
   desc 'Ensure that linked dirs exist.'
@@ -109,7 +116,7 @@ namespace :laravel do
 
     on roles fetch(:laravel_roles) do
       fetch(:linked_dirs).each do |path|
-        within release_path do
+        within shared_path do
           execute :mkdir, '-p', path
         end
       end
@@ -213,12 +220,16 @@ namespace :laravel do
     set(:laravel_artisan_flags, laravel_artisan_flags)
   end
 
-  before 'deploy:starting', 'laravel:resolve_linked_dirs'
-  before 'deploy:starting', 'laravel:resolve_acl_paths'
-  after  'deploy:starting', 'laravel:ensure_linked_dirs_exist'
-  after  'deploy:starting', 'laravel:ensure_acl_paths_exist'
-  after  'deploy:updating', 'deploy:set_permissions:acl'
-  before 'composer:run',    'laravel:upload_dotenv_file'
-  after  'composer:run',    'laravel:storage_link'
-  after  'composer:run',    'laravel:optimize'
+  before 'deploy:starting',            'laravel:resolve_linked_dirs'
+  after  'deploy:starting',            'laravel:ensure_linked_dirs_exist'
+  before 'composer:run',               'laravel:upload_dotenv_file'
+  after  'composer:run',               'laravel:storage_link'
+  after  'composer:run',               'laravel:optimize'
+
+  # Only include ACL tasks if enabled
+  if fetch(:laravel_set_acl_paths)
+    before 'deploy:starting',            'laravel:resolve_acl_paths'
+    before 'deploy:set_permissions:acl', 'laravel:ensure_acl_paths_exist'
+    before 'deploy:publishing',          'deploy:set_permissions:acl'
+  end
 end
