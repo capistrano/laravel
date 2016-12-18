@@ -188,7 +188,7 @@ namespace :laravel do
 
   desc 'Create a symbolic link from "public/storage" to "storage/app/public."'
   task :storage_link do
-    next if fetch(:laravel_version) <= 5.3
+    next if fetch(:laravel_version) < 5.3
     Rake::Task['laravel:artisan'].invoke('storage:link')
   end
 
