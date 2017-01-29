@@ -17,6 +17,9 @@ namespace :load do
     # The version of laravel being deployed
     set :laravel_version, 5.3
 
+    # Whether to upload the dotenv file on deploy
+    set :laravel_upload_dotenv_file_on_deploy, true
+
     # Which dotenv file to transfer to the server
     set :laravel_dotenv_file, '.env'
 
@@ -139,6 +142,8 @@ namespace :laravel do
 
   desc 'Upload dotenv file for release.'
   task :upload_dotenv_file do
+    next unless fetch(:laravel_upload_env_file_on_deploy)
+
     # Dotenv was introduced in Laravel 5
     next if fetch(:laravel_version) < 5
 

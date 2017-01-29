@@ -72,6 +72,9 @@ set :laravel_migration_artisan_flags, "--force --env=#{fetch(:stage)}"
 # The version of laravel being deployed
 set :laravel_version, 5.3
 
+# Whether to upload the dotenv file on deploy
+set :laravel_upload_dotenv_file_on_deploy, true
+
 # Which dotenv file to transfer to the server
 set :laravel_dotenv_file, './.env'
 
