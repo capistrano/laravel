@@ -98,6 +98,7 @@ namespace :laravel do
 
   desc 'Determine which paths, if any, to have ACL permissions set.'
   task :resolve_acl_paths do
+    next unless fetch(:laravel_set_acl_paths)
     laravel_version = fetch(:laravel_version)
 
     # Use Laravel 5 ACL paths by default
@@ -125,7 +126,7 @@ namespace :laravel do
 
   desc 'Ensure that ACL paths exist.'
   task :ensure_acl_paths_exist do
-    next unless fetch(:laravel_ensure_acl_paths_exist)
+    next unless fetch(:laravel_set_acl_paths) && fetch(:laravel_ensure_acl_paths_exist)
 
     on roles fetch(:laravel_roles) do
       fetch(:file_permissions_paths).each do |path|
@@ -188,7 +189,7 @@ namespace :laravel do
 
   desc 'Create a symbolic link from "public/storage" to "storage/app/public."'
   task :storage_link do
-    next if fetch(:laravel_version) <= 5.3
+    next if fetch(:laravel_version) < 5.3
     Rake::Task['laravel:artisan'].invoke('storage:link')
   end
 
@@ -221,15 +222,11 @@ namespace :laravel do
   end
 
   before 'deploy:starting',            'laravel:resolve_linked_dirs'
+  before 'deploy:starting',            'laravel:resolve_acl_paths'
   after  'deploy:starting',            'laravel:ensure_linked_dirs_exist'
+  after  'deploy:updating',            'laravel:ensure_acl_paths_exist'
+  before 'deploy:updated',             'deploy:set_permissions:acl'
   before 'composer:run',               'laravel:upload_dotenv_file'
   after  'composer:run',               'laravel:storage_link'
   after  'composer:run',               'laravel:optimize'
-
-  # Only include ACL tasks if enabled
-  if fetch(:laravel_set_acl_paths)
-    before 'deploy:starting',            'laravel:resolve_acl_paths'
-    before 'deploy:set_permissions:acl', 'laravel:ensure_acl_paths_exist'
-    before 'deploy:publishing',          'deploy:set_permissions:acl'
-  end
 end
