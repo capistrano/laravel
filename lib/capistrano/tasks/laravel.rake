@@ -142,7 +142,7 @@ namespace :laravel do
 
   desc 'Upload dotenv file for release.'
   task :upload_dotenv_file do
-    next unless fetch(:laravel_upload_env_file_on_deploy)
+    next unless fetch(:laravel_upload_dotenv_file_on_deploy)
 
     # Dotenv was introduced in Laravel 5
     next if fetch(:laravel_version) < 5
