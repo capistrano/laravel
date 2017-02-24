@@ -1,7 +1,7 @@
 # coding: utf-8
-lib = File.expand_path('../lib', __FILE__)
+lib = File.expand_path("../lib", __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'capistrano/laravel/version'
+require "capistrano/laravel/version"
 
 Gem::Specification.new do |spec|
   spec.name          = "capistrano-laravel"
@@ -9,8 +9,8 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Peter Mitchell", "Andrew Miller"]
   spec.email         = ["peterjmit@gmail.com", "ikari7789@yahoo.com"]
 
-  spec.summary       = %q{Laravel specific deployment options for Capistrano 3.x}
-  spec.description   = %q{Laravel deployment for Capistrano 3.x}
+  spec.summary       = "Laravel specific deployment options for Capistrano 3.x"
+  spec.description   = "Laravel deployment for Capistrano 3.x"
   spec.homepage      = "https://github.com/capistrano/laravel"
   spec.license       = "MIT"
 
