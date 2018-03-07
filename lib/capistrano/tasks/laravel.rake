@@ -189,6 +189,7 @@ namespace :laravel do
 
   desc "Optimize the framework for better performance."
   task :optimize do
+    next if fetch(:laravel_version) >= 5.5
     Rake::Task["laravel:artisan"].invoke(:optimize, "--force")
   end
 
