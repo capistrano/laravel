@@ -226,6 +226,18 @@ namespace :laravel do
     set(:laravel_roles, laravel_roles)
     set(:laravel_artisan_flags, laravel_artisan_flags)
   end
+  
+  desc "Restart the queue worker"
+	task :restart_queue do
+		laravel_roles = fetch(:laravel_roles)
+
+		set(:laravel_roles, fetch(:laravel_queue_roles))
+
+		Rake::Task["laravel:artisan"].invoke("queue:restart")
+
+		set(:laravel_roles, laravel_roles)
+	end
+
 
   before "deploy:starting", "laravel:resolve_linked_dirs"
   before "deploy:starting", "laravel:resolve_acl_paths"
