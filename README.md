@@ -142,7 +142,7 @@ before 'deploy:starting', 'laravel:resolve_acl_paths'
 after  'deploy:starting', 'laravel:ensure_linked_dirs_exist'
 before 'deploy:updating', 'laravel:ensure_acl_paths_exist'
 before 'deploy:updated',  'deploy:set_permissions:acl'
-before 'composer:run',    'laravel:upload_dotenv_file'
+before 'deploy:updated',  'laravel:upload_dotenv_file'
 after  'composer:run',    'laravel:storage_link'
 after  'composer:run',    'laravel:optimize'
 ```
