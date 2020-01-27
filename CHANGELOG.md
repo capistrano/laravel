@@ -8,10 +8,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 ### Changed
+- Tested RVM versions to `2.5`, `2.6`, and `2.7`.
+- Source files to reflect changes requested by rubocop.
 
 ### Deprecated
 
 ### Removed
+- `.rubocop.yml` in favor of just using defaults.
 
 ### Fixed
 
