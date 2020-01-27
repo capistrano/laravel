@@ -4,7 +4,8 @@ Deploy Laravel applications with Capistrano v3.*
 
 ## Installation
 
-If managing your Capistrano deploy as a ruby project, add this line to your application's Gemfile:
+If managing your Capistrano deploy as a ruby project, add this line to your
+application's Gemfile:
 
 ```ruby
 gem 'capistrano', '~> 3.0.0'
@@ -25,7 +26,9 @@ gem install capistrano-laravel
 
 ## Setting up Capistrano
 
-After installing Capistrano, you can use it to initialize a skeleton configuration. To setup Capistrano, please follow the documentation provided on their website:
+After installing Capistrano, you can use it to initialize a skeleton
+configuration. To setup Capistrano, please follow the documentation
+provided on their website:
 
 http://capistranorb.com/documentation/getting-started/preparing-your-application/
 
@@ -130,7 +133,8 @@ set :laravel_5_acl_paths, [
 
 ### Tasks
 
-The following tasks are added to your deploy automagically when adding capistrano/laravel to your deploy.
+The following tasks are added to your deploy automagically when adding
+capistrano/laravel to your deploy.
 
 ```ruby
 before 'deploy:starting', 'laravel:resolve_linked_dirs'
@@ -186,9 +190,14 @@ invoke 'laravel:migrate_rollback'
 
 ## Development
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+After checking out the repo, run `bin/setup` to install dependencies. Then, run
+`rake spec` to run the tests. You can also run `bin/console` for an interactive
+prompt that will allow you to experiment.
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+To install this gem onto your local machine, run `bundle exec rake install`. To
+release a new version, update the version number in `version.rb`, and then run
+`bundle exec rake release`, which will create a git tag for the version, push
+git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
 
 ## Contributing
 
