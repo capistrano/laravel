@@ -8,19 +8,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 ### Changed
+
+### Deprecated
+
+### Removed
+
+### Fixed
+
+### Security
+
+## [1.2.3] - 2020-01-28
+### Changed
 - Tested RVM versions to `2.5`, `2.6`, and `2.7`.
 - Source files to reflect changes requested by rubocop.
 - `laravel:upload_dotenv_file` to run before `deploy:updated` instead of
   `composer:run` to avoid issues with rollback.
 
-### Deprecated
-
 ### Removed
 - `.rubocop.yml` in favor of just using defaults.
-
-### Fixed
-
-### Security
 
 ## [1.2.2] - 2018-03-07
 ### Added
@@ -109,7 +114,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Basic Laravel tasks: `laravel:artisan`, `laravel:artisan optimize`, `laravel:artisan migrate`.
 
-[Unreleased]: https://github.com/capistrano/laravel/compare/v1.2.2...HEAD
+[Unreleased]: https://github.com/capistrano/laravel/compare/v1.2.3...HEAD
+[1.2.3]: https://github.com/capistrano/laravel/compare/v1.2.2...v1.2.3
 [1.2.2]: https://github.com/capistrano/laravel/compare/v1.2.1...v1.2.2
 [1.2.1]: https://github.com/capistrano/laravel/compare/v1.2.0...v1.2.1
 [1.2.0]: https://github.com/capistrano/laravel/compare/v1.1.1...v1.2.0
