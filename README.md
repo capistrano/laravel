@@ -69,6 +69,9 @@ set :laravel_artisan_flags, "--env=#{fetch(:stage)}"
 # Which roles to use for running migrations
 set :laravel_migration_roles, :all
 
+# Which roles to use for restart queue worker
+set :laravel_queue_roles, :all
+
 # The artisan flags to include on artisan commands by default when running migrations
 set :laravel_migration_artisan_flags, "--force --env=#{fetch(:stage)}"
 
@@ -145,6 +148,7 @@ before 'deploy:updated',  'deploy:set_permissions:acl'
 before 'deploy:updated',  'laravel:upload_dotenv_file'
 after  'composer:run',    'laravel:storage_link'
 after  'composer:run',    'laravel:optimize'
+after 'composer:run',     'laravel:restart_queue'
 ```
 
 #### Task Descriptions
@@ -186,6 +190,9 @@ invoke 'laravel:migrate'
 
 # Rollback the last database migration.
 invoke 'laravel:migrate_rollback'
+
+# Restart the queue worker
+invoke 'laravel:restart_queue'
 ```
 
 ## Development
