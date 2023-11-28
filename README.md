@@ -167,6 +167,7 @@ invoke 'laravel:upload_dotenv_file'
 
 # Execute a provided artisan command.
 # Replace :command_name with the command to execute
+# e.g. 'laravel:artisan[list]'
 invoke 'laravel:artisan[:command_name]'
 
 # Create a cache file for faster configuration loading
